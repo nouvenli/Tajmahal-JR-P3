@@ -22,37 +22,46 @@ import dagger.hilt.android.lifecycle.HiltViewModel;
 
 /**
  * MainViewModel is responsible for preparing and managing the data for the {@link DetailsFragment}.
- * It communicates with the {@link RestaurantRepository} to fetch restaurant details and provides
- * utility methods related to the restaurant UI.
+ * It communicates with the {@link RestaurantRepository} to fetch restaurant details and
+ * calculate aggregated statistics about reviews.
  * <p>
  * This ViewModel is integrated with Hilt for dependency injection.
  */
 @HiltViewModel
 public class DetailsViewModel extends ViewModel {
 
-    // --- Repositories ---
     private final RestaurantRepository restaurantRepository;
 
-    // --- LiveData  computed ---
-    private final MediatorLiveData<ReviewStats> reviewStats = new MediatorLiveData<>();
-
+    // --- Computed LiveData ---
 
     /**
-     * Constructor that Hilt will use to create an instance of MainViewModel.
-     * * @param restaurantRepository The repository which will provide restaurant data.
+     * MediatorLiveData that automatically calculates review statistics
+     * whenever the review list changes.
+     */
+    private final MediatorLiveData<ReviewStats> reviewStats = new MediatorLiveData<>();
+
+    // --- Constructor ---
+
+    /**
+     * Constructs a DetailsViewModel with the required repository.
+     * Initializes the computed LiveData for review statistics.
+     *
+     * @param restaurantRepository the repository for accessing restaurant and review data
      */
     @Inject
     public DetailsViewModel(RestaurantRepository restaurantRepository) {
         this.restaurantRepository = restaurantRepository;
 
 
-    //  LiveData computed
+        // Setup computed LiveData for review statistics
         reviewStats.addSource(getReviews(), reviews -> {
+            // Handle empty or null reviews
             if (reviews == null || reviews.isEmpty()) {
                 reviewStats.setValue(new ReviewStats(0f, 0, new int[5], new int[5]));
                 return;
             }
 
+            // Calculate rating distribution
             float sum = 0f;
             int[] distribution = new int[5];
             for (Review r : reviews) {
@@ -63,38 +72,59 @@ public class DetailsViewModel extends ViewModel {
                 }
             }
 
+            // Calculate average rating
             int count = reviews.size();
             float average = sum / count;
 
+            // Calculate percentage distribution
             int[] percent = new int[5];
             for (int i = 0; i < 5; i++) {
                 percent[i] = (int) ((distribution[i] * 100f) / count);
             }
-
+            // Update LiveData with calculated statistics
             reviewStats.setValue(new ReviewStats(average, count, distribution, percent));
         });
     }
 
-    // --- exposed LiveData ---
+    // --- Data access methods ---
 
     /**
      * Fetches the details of the Taj Mahal restaurant.
+     *
      * @return LiveData object containing the details of the Taj Mahal restaurant.
      */
     public LiveData<Restaurant> getTajMahalRestaurant() {
         return restaurantRepository.getRestaurant();
     }
 
+    /**
+     * Retrieves the list of customer reviews.
+     *
+     * @return LiveData containing the list of reviews
+     */
     public LiveData<List<Review>> getReviews() {
         return restaurantRepository.getReviews();
     }
 
+    /**
+     * Retrieves the calculated review statistics.
+     * <p>
+     * This LiveData is automatically updated whenever the review list changes.
+     * It provides aggregated data including average rating, review count,
+     * and rating distribution.
+     * </p>
+     *
+     * @return LiveData containing the computed review statistics
+     */
     public LiveData<ReviewStats> getReviewStats() {
         return reviewStats;
     }
 
+    // --- Utility methods ---
+
     /**
      * Retrieves the current day of the week in French.
+     *
      * @return A string representing the current day of the week in French.
      */
     public String getCurrentDay(Context context) {

@@ -1,7 +1,6 @@
 package com.openclassrooms.tajmahal.ui.restaurant;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -10,11 +9,9 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.Toast;
 
 import com.openclassrooms.tajmahal.R;
@@ -28,7 +25,7 @@ import dagger.hilt.android.AndroidEntryPoint;
 /**
  * DetailsFragment is the entry point of the application and serves as the primary UI.
  * It displays details about a restaurant and provides functionality to open its location
- * in a map, call its phone number, or view its website.
+ * in a map, call its phone number, or view its website, , and navigate to the reviews screen.
  * <p>
  * This class uses {@link FragmentDetailsBinding} for data binding to its layout and
  * {@link DetailsViewModel} to interact with data sources and manage UI-related data.
@@ -54,8 +51,9 @@ public class DetailsFragment extends Fragment {
      */
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = FragmentDetailsBinding.inflate(inflater, container, false); // Binds the layout using view binding.
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+        binding = FragmentDetailsBinding.inflate(inflater, container, false);
         return binding.getRoot(); // Returns the root view.
     }
 
@@ -70,10 +68,7 @@ public class DetailsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        // --- ViewModel initialise for this fragment ---
-        detailsViewModel = new ViewModelProvider(this).get(DetailsViewModel.class);
-
-        // --- Observers et listeners ---
+        setupViewModel();
         observeRestaurant();
         observeReviewStats();
         setupNavigation();
@@ -83,27 +78,48 @@ public class DetailsFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        // Eviter fuite mémoire liée au binding
+        // Avoid memory leaks related to binding
         binding = null;
     }
 
 
-    // --- Observers - get LiveData from ViewModel ---
+    // --- Setup methods ---
 
+    /**
+     * Initializes the ViewModel for this fragment.
+     */
+    private void setupViewModel() {
+        detailsViewModel = new ViewModelProvider(this).get(DetailsViewModel.class);
+    }
+
+    // --- ViewModel observation ---
+
+    /**
+     * Observes restaurant data from the ViewModel and updates the UI.
+     */
     private void observeRestaurant() {
         detailsViewModel.getTajMahalRestaurant().observe(getViewLifecycleOwner(), this::updateRestaurantUI);
     }
 
+    /**
+     * Observes review statistics from the ViewModel and updates the UI.
+     */
     private void observeReviewStats() {
         detailsViewModel.getReviewStats().observe(getViewLifecycleOwner(), this::updateReviewStatsUI);
     }
 
 
-    // --- update ui Restaurant and ReviewStats---
+    // --- UI update Methods ---
 
+    /**
+     * Updates the UI with restaurant information.
+     *
+     * @param restaurant the restaurant data to display
+     */
     private void updateRestaurantUI(Restaurant restaurant) {
         if (restaurant == null) return;
 
+        // Display restaurant information
         binding.tvRestaurantName.setText(restaurant.getName());
         binding.tvRestaurantDay.setText(detailsViewModel.getCurrentDay(requireContext()));
         binding.tvRestaurantType.setText(String.format("%s %s", getString(R.string.restaurant), restaurant.getType()));
@@ -111,18 +127,27 @@ public class DetailsFragment extends Fragment {
         binding.tvRestaurantAddress.setText(restaurant.getAddress());
         binding.tvRestaurantWebsite.setText(restaurant.getWebsite());
         binding.tvRestaurantPhoneNumber.setText(restaurant.getPhoneNumber());
+
+        // Show/hide service type chips
         binding.chipOnPremise.setVisibility(restaurant.isDineIn() ? View.VISIBLE : View.GONE);
         binding.chipTakeAway.setVisibility(restaurant.isTakeAway() ? View.VISIBLE : View.GONE);
 
+        // Setup action buttons
         binding.buttonAdress.setOnClickListener(v -> openMap(restaurant.getAddress()));
         binding.buttonPhone.setOnClickListener(v -> dialPhoneNumber(restaurant.getPhoneNumber()));
         binding.buttonWebsite.setOnClickListener(v -> openBrowser(restaurant.getWebsite()));
 
     }
 
+    /**
+     * Updates the UI with review statistics.
+     *
+     * @param stats the review statistics to display
+     */
     private void updateReviewStatsUI(ReviewStats stats) {
         if (stats == null) return;
 
+        // Display average rating and count
         binding.ratingBar.setRating(stats.getAverageRating());
         binding.tvAverageRating.setText(String.format("%.1f", stats.getAverageRating()));
         binding.tvReviewCount.setText(String.format("(%d)", stats.getReviewCount()));
@@ -134,6 +159,8 @@ public class DetailsFragment extends Fragment {
         binding.progressBar2.setProgress(stats.getPercentDistribution()[1]);
         binding.progressBar1.setProgress(stats.getPercentDistribution()[0]);
     }
+
+    // --- Intent methods ---
 
     /**
      * Opens the provided address in Google Maps or shows an error if Google Maps
@@ -183,15 +210,17 @@ public class DetailsFragment extends Fragment {
         }
     }
 
-    ;
+    // --- Navigation ---
 
-    // --- Navigation to fragmentReview ---
-
+    /**
+     * Sets up navigation to the review screen.
+     */
     private void setupNavigation() {
         binding.tvSeeReviews.setOnClickListener(v -> {
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, ReviewFragment.newInstance()).addToBackStack(null).commit();
         });
     }
+
 
     public static DetailsFragment newInstance() {
         return new DetailsFragment();

@@ -9,7 +9,6 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +16,6 @@ import android.view.Window;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.openclassrooms.tajmahal.R;
 import com.openclassrooms.tajmahal.adapter.ReviewAdapter;
 import com.openclassrooms.tajmahal.databinding.FragmentReviewBinding;
 
@@ -55,9 +53,9 @@ public class ReviewFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        setupViewModel();  //connexion entre fragment et données
-        setupRecyclerView(); // crée l'adapter
-        setupUI(); // mise en place de l'interface
+        setupViewModel();
+        setupRecyclerView();
+        setupUI();
         setupRestaurantInfo();
         observeViewModelData();
         setupAddReviewButton();
@@ -66,14 +64,17 @@ public class ReviewFragment extends Fragment {
     }
 
     // ---setup methods ---
+
+    /**
+     * Initializes the ViewModel.
+     */
     private void setupViewModel() {
         reviewViewModel = new ViewModelProvider(this).get(ReviewViewModel.class);
     }
 
     /**
-     * cree l'adapteur
-     * configure le recyclerview pour utiliser l'adapter
-     * disposition des items liste verticale
+     * Sets up the RecyclerView with its adapter.
+     * Configures vertical layout for displaying the review list.
      */
     private void setupRecyclerView() {
         adapter = new ReviewAdapter();
@@ -82,21 +83,29 @@ public class ReviewFragment extends Fragment {
 
     }
 
+    /**
+     * Configures the status bar appearance.
+     * Sets white background with dark icons for better visibility.
+     */
     private void setupUI() {
         Window window = requireActivity().getWindow();
 
-        // Réactive la barre de statut normale
+        // Reset status bar to normal state
         window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
 
-        // Fond blanc pour la barre
+        // White background for status bar
         window.setStatusBarColor(Color.WHITE);
 
-        // Texte noir sur la barre (icônes sombres)
+        // Dark icons on status bar (API 23+)
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
             window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         }
     }
 
+    /**
+     * Sets up the current user's information display.
+     * Loads username and profile picture.
+     */
     private void setupRestaurantInfo() {
         binding.tvUserName.setText(reviewViewModel.getCurrentUserName());
         Glide.with(requireContext())
@@ -104,34 +113,32 @@ public class ReviewFragment extends Fragment {
                 .circleCrop()
                 .into(binding.ivAvatarUser);
     }
-// --- ViewModel Observation  ---
+
+    // --- ViewModel Observation  ---
 
     /**
-     * observateur de la liste des avis ,et des èvènements du ViewModel
-     * récupère le liveData depuis le ViewModel
-     * vérifie(observe) s'il y a des changements
-     * met à jour l'affichage du RecyclerView
+     * Observes ViewModel LiveData and updates UI accordingly.
+     * Handles restaurant info, review list, validation errors, and success events.
      */
     private void observeViewModelData() {
-        // nom du restaruant
+        // Observe restaurant information
         reviewViewModel.getRestaurant().observe(getViewLifecycleOwner(), restaurant -> {
             binding.tvRestaurantName.setText(restaurant.getName());
         });
 
-        // observe liste avis
+        // Observe review list updates
         reviewViewModel.getReviews().observe(getViewLifecycleOwner(), reviews -> {
-            //adapter.submitList(null);
             adapter.submitList(new ArrayList<>(reviews), () -> {
                 binding.rvReviews.smoothScrollToPosition(0);
             });
         });
 
-        // observe èvènement de validation et erreur comment et rating
+        // Observe comment validation errors
         reviewViewModel.getCommentError().observe(getViewLifecycleOwner(), error -> {
-            // Affiche l'erreur si non null, sinon l'enlève.
             binding.etUserComment.setError(error);
         });
 
+        // Observe rating validation errors
         reviewViewModel.getRatingError().observe(getViewLifecycleOwner(), error -> {
             // Utilise un Toast pour une erreur de rating
             if (error != null) {
@@ -139,14 +146,15 @@ public class ReviewFragment extends Fragment {
             }
         });
 
-        // observe succes
+        // Observe review addition success event
         reviewViewModel.getReviewAddSuccessEvent().observe(getViewLifecycleOwner(), isSuccess -> {
             if (isSuccess) {
                 // Réinitialisation de l'UI si l'ajout a réussi - C'EST UNE MANIPULATION D'UI
                 binding.etUserComment.setText("");
                 binding.rbRatingBarUser.setRating(0);
                 Toast.makeText(requireContext(), "Avis ajouté avec succès", Toast.LENGTH_SHORT).show();
-                // reset toast
+
+                // Reset success event to prevent re-triggering on rotation
                 reviewViewModel.resetSuccessEvent();
             }
         });
@@ -155,20 +163,23 @@ public class ReviewFragment extends Fragment {
     // --- user interaction ---
 
     /**
-     * extrait entrée utilisateur
-     * est ce que le bouton Valider est pressé
+     * Sets up the review submission button.
+     * Extracts user input and triggers review validation and addition.
      */
     private void setupAddReviewButton() {
         binding.btValidation.setOnClickListener(v -> {
-            // recupère les infos utilisateurs et rating
+            // Get user input
             String comment = binding.etUserComment.getText().toString().trim();
             float rating = binding.rbRatingBarUser.getRating();
 
-            // appel à ViewModel pour traitement
+            // Process review through ViewModel
             reviewViewModel.processNewReview(comment, (int) rating);
         });
     }
 
+    /**
+     * Sets up the back button to return to the previous screen.
+     */
     private void setupBackButton() {
         binding.ivGoBack.setOnClickListener(v -> {
             requireActivity().getSupportFragmentManager().popBackStack();
@@ -176,6 +187,13 @@ public class ReviewFragment extends Fragment {
     }
 
 
+    // --- Factory method ---
+
+    /**
+     * Creates a new instance of ReviewFragment.
+     *
+     * @return a new ReviewFragment instance
+     */
     public static ReviewFragment newInstance() {
         return new ReviewFragment();
     }

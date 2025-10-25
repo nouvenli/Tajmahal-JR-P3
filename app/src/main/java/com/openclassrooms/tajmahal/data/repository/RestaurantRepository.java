@@ -24,6 +24,7 @@ import javax.inject.Singleton;
  * the logic for deciding whether to fetch data from a network source or use data from a local cache.
  *
  * @see Restaurant
+ * @see Review
  * @see RestaurantApi
  */
 @Singleton
@@ -31,8 +32,15 @@ public class RestaurantRepository {
 
     // The API interface instance that will be used for network requests related to restaurant data.
     private final RestaurantApi restaurantApi;
-    //creation mutableLiveData pour les reviews
+
+    // --- LiveData ---
+
+    private final MutableLiveData<Restaurant> restaurantLiveData = new MutableLiveData<>();
     private final MutableLiveData<List<Review>> reviewsLiveData = new MutableLiveData<>();
+
+
+    // --- Constructors ---
+
     /**
      * Constructs a new instance of {@link RestaurantRepository} with the given {@link RestaurantApi}.
      *
@@ -41,9 +49,12 @@ public class RestaurantRepository {
     @Inject
     public RestaurantRepository(RestaurantApi restaurantApi) {
         this.restaurantApi = restaurantApi;
-        // initialize the reviewsLiveData when the repository is created
+        // initialize the LiveData when the repository is created
+        restaurantLiveData.setValue(restaurantApi.getRestaurant());
         reviewsLiveData.setValue(restaurantApi.getReviews());
     }
+
+    // --- Data access methods ---
 
     /**
      * Fetches the restaurant details.
@@ -55,8 +66,9 @@ public class RestaurantRepository {
      * @return LiveData holding the restaurant details.
      */
     public LiveData<Restaurant> getRestaurant() {
-        return new MutableLiveData<>(restaurantApi.getRestaurant());
+        return restaurantLiveData;
     }
+
     /**
      * Retrieves the list of user reviews.
      *
@@ -66,13 +78,17 @@ public class RestaurantRepository {
         return reviewsLiveData;
     }
 
-    /* update reviews and notifies observers
+    // --- Data modification methods ---
+
+    /**
+     * Adds a new review to the list and notifies all observers.
+     * Creates a new list instance to trigger LiveData update.
      *
-    @param review - the review to add
+     * @param review the review to add
      */
     public void addReview(Review review) {
         restaurantApi.addReview(review);
-        // ✅ Crée une NOUVELLE liste pour que LiveData détecte le changement
+        // Create new list to notify all observers
         reviewsLiveData.setValue(new ArrayList<>(restaurantApi.getReviews()));
     }
 }

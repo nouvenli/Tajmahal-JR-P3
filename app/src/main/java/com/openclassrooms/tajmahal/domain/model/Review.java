@@ -1,6 +1,5 @@
 package com.openclassrooms.tajmahal.domain.model;
 
-import java.util.Date;
 import java.util.Objects;
 
 
@@ -18,6 +17,8 @@ public class Review {
     private String comment;
     private int rate;
 
+    // --- Constructor ---
+
     /**
      * Constructs a new Review instance.
      *
@@ -33,55 +34,85 @@ public class Review {
         this.rate = rate;
     }
 
-    //--- getters and setters for fields ---
+    //--- getters  ---
 
     /**
-     * Getters - Returns for fields : username, picture, comment, rate
+     * Gets the username of the reviewer.
      *
-     * @return
-     * a String representing the username
-     * a String representing the picture's URL or path
-     * a String containing the feedback or comment
-     * an integer representing the rating value
+     * @return the username
      */
-
     public String getUsername() {
         return username;
     }
+
+    /**
+     * Gets the profile picture URL or path.
+     *
+     * @return the picture URL or path
+     */
     public String getPicture() {
         return picture;
     }
+
+    /**
+     * Gets the comment or feedback.
+     *
+     * @return the comment text
+     */
     public String getComment() {
         return comment;
     }
+
+    /**
+     * Gets the rating value.
+     *
+     * @return the rating (integer value)
+     */
     public int getRate() {
         return rate;
     }
 
+    // --- Setters ---
 
     /**
-     * Setters - Sets for fields : username, picture, comment, rate
+     * Sets the username of the reviewer.
      *
-     * @param
-     * username the name or updates the profile picture of the reviewer
-     * picture the profile picture's URL or path to be set
-     * comment the comment or feedback to be set
-     * rate the rating value to be set
+     * @param username the username to set
      */
     public void setUsername(String username) {
         this.username = username;
     }
+
+    /**
+     * Sets the profile picture URL or path.
+     *
+     * @param picture the picture URL or path to set
+     */
     public void setPicture(String picture) {
         this.picture = picture;
     }
+
+    /**
+     * Sets the comment or feedback.
+     *
+     * @param comment the comment to set
+     */
     public void setComment(String comment) {
         this.comment = comment;
     }
-    public void setRate(int rate) {this.rate = rate; }
 
+    /**
+     * Sets the rating value.
+     *
+     * @param rate the rating to set
+     */
+    public void setRate(int rate) {
+        this.rate = rate;
+    }
 
+    // --- Object methods ---
 
-/**
+    /**
      * Compares this review with another object for equality.
      * Two reviews are considered equal if all their fields are identical.
      *
@@ -99,6 +130,7 @@ public class Review {
 
     /**
      * Generates a hash code for this review based on its fields.
+     *
      * @return the generated hash code
      */
     @Override

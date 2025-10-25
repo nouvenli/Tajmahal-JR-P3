@@ -1,7 +1,5 @@
 package com.openclassrooms.tajmahal.data.service;
 
-import androidx.lifecycle.LiveData;
-
 import com.openclassrooms.tajmahal.domain.model.Restaurant;
 import com.openclassrooms.tajmahal.domain.model.Review;
 
@@ -46,13 +44,18 @@ public interface RestaurantApi {
      * This method will usually be connected to a network call or database query in its
      * implementing class, fetching the list of the existing reviews.
      *
+     *  @return The list of {@link Review} objects containing all the reviews of the restaurant.
      */
     List<Review> getReviews();
 
     /**
-     * this method fetching the new reviews
+     * Adds a new review to the restaurant.
+     * <p>
+     * In an actual implementation, this would typically involve a network call
+     * or database operation to persist the new review.
+     * </p>
      *
-      * @param review
+     * @param review the review to add
      */
     void addReview(Review review);
 }

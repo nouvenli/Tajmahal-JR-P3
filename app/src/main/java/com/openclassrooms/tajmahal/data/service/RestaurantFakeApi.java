@@ -30,13 +30,22 @@ import java.util.List;
  */
 public class RestaurantFakeApi implements RestaurantApi {
 
-List<Review> reviews = new ArrayList<>(Arrays.asList(
-        new Review("Ranjit Singh", "https://xsgames.co/randomusers/assets/avatars/male/71.jpg", "Service très rapide et nourriture délicieuse, nous mangeons ici chaque week-end, c'est très rapide et savoureux. Continuez ainsi!", 5),
-        new Review("Martyna Siddeswara", "https://xsgames.co/randomusers/assets/avatars/female/31.jpg", "Un service excellent et des plats incroyablement savoureux. Nous sommes vraiment satisfaits de notre expérience au restaurant.", 4),
-        new Review("Komala Alanazi", "https://xsgames.co/randomusers/assets/avatars/male/46.jpg", "La cuisine est délicieuse et le service est également excellent. Le propriétaire est très sympathique et veille toujours à ce que votre repas soit satisfaisant. Cet endroit est un choix sûr!", 5),
-        new Review("David John", "https://xsgames.co/randomusers/assets/avatars/male/67.jpg", "Les currys manquaient de diversité de saveurs et semblaient tous à base de tomates. Malgré les évaluations élevées que nous avons vues et nos attentes, nous avons été déçus.", 2),
-        new Review("Emilie Hood", "https://xsgames.co/randomusers/assets/avatars/female/20.jpg", "Très bon restaurant Indien ! Je recommande.", 4)
-));
+    // --- Mock data ---
+
+    /**
+     * List of mock reviews for the restaurant.
+     * New reviews are added at the beginning of the list.
+     */
+    private final List<Review> reviews = new ArrayList<>(Arrays.asList(
+            new Review("Ranjit Singh", "https://xsgames.co/randomusers/assets/avatars/male/71.jpg", "Service très rapide et nourriture délicieuse, nous mangeons ici chaque week-end, c'est très rapide et savoureux. Continuez ainsi!", 5),
+            new Review("Martyna Siddeswara", "https://xsgames.co/randomusers/assets/avatars/female/31.jpg", "Un service excellent et des plats incroyablement savoureux. Nous sommes vraiment satisfaits de notre expérience au restaurant.", 4),
+            new Review("Komala Alanazi", "https://xsgames.co/randomusers/assets/avatars/male/46.jpg", "La cuisine est délicieuse et le service est également excellent. Le propriétaire est très sympathique et veille toujours à ce que votre repas soit satisfaisant. Cet endroit est un choix sûr!", 5),
+            new Review("David John", "https://xsgames.co/randomusers/assets/avatars/male/67.jpg", "Les currys manquaient de diversité de saveurs et semblaient tous à base de tomates. Malgré les évaluations élevées que nous avons vues et nos attentes, nous avons été déçus.", 2),
+            new Review("Emilie Hood", "https://xsgames.co/randomusers/assets/avatars/female/20.jpg", "Très bon restaurant Indien ! Je recommande.", 4)
+    ));
+
+    // --- API implementation methods ---
+
     /**
      * Retrieves a hard-coded {@link Restaurant} object for the "Taj Mahal".
      * <p>
@@ -69,9 +78,18 @@ List<Review> reviews = new ArrayList<>(Arrays.asList(
         return reviews;
     }
 
+    /**
+     * Adds a new review to the beginning of the list.
+     * <p>
+     * This method simulates adding a review by inserting it at position 0,
+     * making it the most recent review.
+     * </p>
+     *
+     * @param review the review to add
+     */
     @Override
     public void addReview(Review review) {
-        reviews.add(0, review);  // Ajoute en tête de liste (position 0)
+        reviews.add(0, review);
     }
 
 }
