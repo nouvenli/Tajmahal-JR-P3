@@ -1,0 +1,256 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > Review</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.openclassrooms.tajmahal.domain.model</a>
+</div>
+
+<h1>Coverage Summary for Class: Review (com.openclassrooms.tajmahal.domain.model)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Review</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    45,5%
+  </span>
+  <span class="absValue">
+    (5/11)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/12)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    50%
+  </span>
+  <span class="absValue">
+    (9/18)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.openclassrooms.tajmahal.domain.model;
+&nbsp;
+&nbsp;import java.util.Objects;
+&nbsp;
+&nbsp;
+&nbsp;/**
+&nbsp; * Represents a user review.
+&nbsp; * This class encapsulates all the details of a review, including the username of the reviewer,
+&nbsp; * their profile picture, the comment they left, and the rating they gave.
+&nbsp; */
+&nbsp;public class Review {
+&nbsp;
+&nbsp;    //--- Fields ---
+&nbsp;
+&nbsp;    private String username;
+&nbsp;    private String picture;
+&nbsp;    private String comment;
+&nbsp;    private int rate;
+&nbsp;
+&nbsp;    // --- Constructor ---
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Constructs a new Review instance.
+&nbsp;     *
+&nbsp;     * @param username the name of the user leaving the review
+&nbsp;     * @param picture  the profile picture URL or path of the user
+&nbsp;     * @param comment  the feedback or comment from the user
+&nbsp;     * @param rate     the rating given by the user
+&nbsp;     */
+<b class="fc">&nbsp;    public Review(String username, String picture, String comment, int rate) {</b>
+<b class="fc">&nbsp;        this.username = username;</b>
+<b class="fc">&nbsp;        this.picture = picture;</b>
+<b class="fc">&nbsp;        this.comment = comment;</b>
+<b class="fc">&nbsp;        this.rate = rate;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    //--- getters  ---
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Gets the username of the reviewer.
+&nbsp;     *
+&nbsp;     * @return the username
+&nbsp;     */
+&nbsp;    public String getUsername() {
+<b class="fc">&nbsp;        return username;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Gets the profile picture URL or path.
+&nbsp;     *
+&nbsp;     * @return the picture URL or path
+&nbsp;     */
+&nbsp;    public String getPicture() {
+<b class="fc">&nbsp;        return picture;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Gets the comment or feedback.
+&nbsp;     *
+&nbsp;     * @return the comment text
+&nbsp;     */
+&nbsp;    public String getComment() {
+<b class="fc">&nbsp;        return comment;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Gets the rating value.
+&nbsp;     *
+&nbsp;     * @return the rating (integer value)
+&nbsp;     */
+&nbsp;    public int getRate() {
+<b class="fc">&nbsp;        return rate;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    // --- Setters ---
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Sets the username of the reviewer.
+&nbsp;     *
+&nbsp;     * @param username the username to set
+&nbsp;     */
+&nbsp;    public void setUsername(String username) {
+<b class="nc">&nbsp;        this.username = username;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Sets the profile picture URL or path.
+&nbsp;     *
+&nbsp;     * @param picture the picture URL or path to set
+&nbsp;     */
+&nbsp;    public void setPicture(String picture) {
+<b class="nc">&nbsp;        this.picture = picture;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Sets the comment or feedback.
+&nbsp;     *
+&nbsp;     * @param comment the comment to set
+&nbsp;     */
+&nbsp;    public void setComment(String comment) {
+<b class="nc">&nbsp;        this.comment = comment;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Sets the rating value.
+&nbsp;     *
+&nbsp;     * @param rate the rating to set
+&nbsp;     */
+&nbsp;    public void setRate(int rate) {
+<b class="nc">&nbsp;        this.rate = rate;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    // --- Object methods ---
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Compares this review with another object for equality.
+&nbsp;     * Two reviews are considered equal if all their fields are identical.
+&nbsp;     *
+&nbsp;     * @param o the object to be compared with
+&nbsp;     * @return true if the objects are equal, false otherwise
+&nbsp;     */
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public boolean equals(Object o) {
+<b class="nc">&nbsp;        if (this == o) return true;</b>
+<b class="nc">&nbsp;        if (o == null || getClass() != o.getClass()) return false;</b>
+<b class="nc">&nbsp;        Review review = (Review) o;</b>
+<b class="nc">&nbsp;        return rate == review.rate &amp;&amp; Objects.equals(username, review.username) &amp;&amp; Objects.equals(picture, review.picture) &amp;&amp; Objects.equals(comment, review.comment);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Generates a hash code for this review based on its fields.
+&nbsp;     *
+&nbsp;     * @return the generated hash code
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public int hashCode() {
+<b class="nc">&nbsp;        return Objects.hash(username, picture, comment, rate);</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-10-26 15:18</div>
+</div>
+</body>
+</html>

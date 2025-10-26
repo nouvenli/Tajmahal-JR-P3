@@ -1,0 +1,199 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > RestaurantFakeApi</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.openclassrooms.tajmahal.data.service</a>
+</div>
+
+<h1>Coverage Summary for Class: RestaurantFakeApi (com.openclassrooms.tajmahal.data.service)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">RestaurantFakeApi</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/5)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.openclassrooms.tajmahal.data.service;
+&nbsp;
+&nbsp;import com.openclassrooms.tajmahal.domain.model.Restaurant;
+&nbsp;import com.openclassrooms.tajmahal.domain.model.Review;
+&nbsp;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.Arrays;
+&nbsp;import java.util.List;
+&nbsp;
+&nbsp;/**
+&nbsp; * A mock implementation of the {@link RestaurantApi} for testing and development purposes.
+&nbsp; * &lt;p&gt;
+&nbsp; * This class simulates an API by returning a hard-coded {@link Restaurant} object, eliminating the
+&nbsp; * need for real network or database calls. Such fake or mock implementations are commonly used in
+&nbsp; * unit testing and when prototyping an application.
+&nbsp; * &lt;/p&gt;
+&nbsp; * &lt;p&gt;
+&nbsp; * For beginners: In software development, a mock is a simulated version of an external system
+&nbsp; * (like an API). Mocks are used to isolate and test certain parts of the software without
+&nbsp; * depending on external systems. By using a mock, developers can simulate how the real system
+&nbsp; * would behave. In this case, instead of making a real API call to get restaurant details,
+&nbsp; * we are using hardcoded values.
+&nbsp; *
+&nbsp; * &lt;p&gt;
+&nbsp; * This class returns details of a specific restaurant, &quot;Taj Mahal&quot;, with pre-defined attributes.
+&nbsp; * &lt;/p&gt;
+&nbsp; *
+&nbsp; * @see Restaurant
+&nbsp; * @see RestaurantApi
+&nbsp; */
+<b class="nc">&nbsp;public class RestaurantFakeApi implements RestaurantApi {</b>
+&nbsp;
+&nbsp;    // --- Mock data ---
+&nbsp;
+&nbsp;    /**
+&nbsp;     * List of mock reviews for the restaurant.
+&nbsp;     * New reviews are added at the beginning of the list.
+&nbsp;     */
+<b class="nc">&nbsp;    private final List&lt;Review&gt; reviews = new ArrayList&lt;&gt;(Arrays.asList(</b>
+&nbsp;            new Review(&quot;Ranjit Singh&quot;, &quot;https://xsgames.co/randomusers/assets/avatars/male/71.jpg&quot;, &quot;Service très rapide et nourriture délicieuse, nous mangeons ici chaque week-end, c&#39;est très rapide et savoureux. Continuez ainsi!&quot;, 5),
+&nbsp;            new Review(&quot;Martyna Siddeswara&quot;, &quot;https://xsgames.co/randomusers/assets/avatars/female/31.jpg&quot;, &quot;Un service excellent et des plats incroyablement savoureux. Nous sommes vraiment satisfaits de notre expérience au restaurant.&quot;, 4),
+&nbsp;            new Review(&quot;Komala Alanazi&quot;, &quot;https://xsgames.co/randomusers/assets/avatars/male/46.jpg&quot;, &quot;La cuisine est délicieuse et le service est également excellent. Le propriétaire est très sympathique et veille toujours à ce que votre repas soit satisfaisant. Cet endroit est un choix sûr!&quot;, 5),
+&nbsp;            new Review(&quot;David John&quot;, &quot;https://xsgames.co/randomusers/assets/avatars/male/67.jpg&quot;, &quot;Les currys manquaient de diversité de saveurs et semblaient tous à base de tomates. Malgré les évaluations élevées que nous avons vues et nos attentes, nous avons été déçus.&quot;, 2),
+&nbsp;            new Review(&quot;Emilie Hood&quot;, &quot;https://xsgames.co/randomusers/assets/avatars/female/20.jpg&quot;, &quot;Très bon restaurant Indien ! Je recommande.&quot;, 4)
+&nbsp;    ));
+&nbsp;
+&nbsp;    // --- API implementation methods ---
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Retrieves a hard-coded {@link Restaurant} object for the &quot;Taj Mahal&quot;.
+&nbsp;     * &lt;p&gt;
+&nbsp;     * This method simulates an API call by immediately returning a Restaurant object
+&nbsp;     * with pre-defined attributes. The object represents the &quot;Taj Mahal&quot; restaurant
+&nbsp;     * with specific details.
+&nbsp;     * &lt;/p&gt;
+&nbsp;     *
+&nbsp;     * @return The hard-coded {@link Restaurant} object for the &quot;Taj Mahal&quot;.
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public Restaurant getRestaurant() {
+<b class="nc">&nbsp;        return new Restaurant(&quot;Taj Mahal&quot;, &quot;Indien&quot;, &quot;11h30 - 14h30・18h30 - 22h00&quot;,</b>
+&nbsp;                &quot;12 Avenue de la Brique - 75010 Paris&quot;, &quot;http://www.tajmahal.fr&quot;, &quot;06 12 34 56 78&quot;,
+&nbsp;                true, true);
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Retrieves a hard-coded {@link Review} object for the &quot;Taj Mahal&quot;.
+&nbsp;     * &lt;p&gt;
+&nbsp;     * This method simulates an API call by immediately returning a Review list
+&nbsp;     * with pre-defined attributes.
+&nbsp;     * &lt;/p&gt;
+&nbsp;     *
+&nbsp;     * @return The hard-coded list {@link Review} for the &quot;Taj Mahal&quot;.
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public List&lt;Review&gt; getReviews() {
+<b class="nc">&nbsp;        return reviews;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Adds a new review to the beginning of the list.
+&nbsp;     * &lt;p&gt;
+&nbsp;     * This method simulates adding a review by inserting it at position 0,
+&nbsp;     * making it the most recent review.
+&nbsp;     * &lt;/p&gt;
+&nbsp;     *
+&nbsp;     * @param review the review to add
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public void addReview(Review review) {
+<b class="nc">&nbsp;        reviews.add(0, review);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-10-26 15:18</div>
+</div>
+</body>
+</html>

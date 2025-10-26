@@ -1,0 +1,313 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > ReviewAdapter</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.openclassrooms.tajmahal.adapter</a>
+</div>
+
+<h1>Coverage Summary for Class: ReviewAdapter (com.openclassrooms.tajmahal.adapter)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ReviewAdapter</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/4)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">ReviewAdapter$1</td>
+  </tr>
+  <tr>
+    <td class="name">ReviewAdapter$ItemCallback</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/3)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">ReviewAdapter$ViewHolder</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/12)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/19)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.openclassrooms.tajmahal.adapter;
+&nbsp;
+&nbsp;import android.view.LayoutInflater;
+&nbsp;import android.view.View;
+&nbsp;import android.view.ViewGroup;
+&nbsp;import android.widget.ImageView;
+&nbsp;import android.widget.RatingBar;
+&nbsp;import android.widget.TextView;
+&nbsp;
+&nbsp;import androidx.annotation.NonNull;
+&nbsp;import androidx.recyclerview.widget.DiffUtil;
+&nbsp;import androidx.recyclerview.widget.ListAdapter;
+&nbsp;import androidx.recyclerview.widget.RecyclerView;
+&nbsp;
+&nbsp;import com.bumptech.glide.Glide;
+&nbsp;import com.openclassrooms.tajmahal.R;
+&nbsp;import com.openclassrooms.tajmahal.domain.model.Review;
+&nbsp;
+&nbsp;/**
+&nbsp; * Adapter class for RecyclerView that manage list of reviews
+&nbsp; * Bind data of reviews using ViewHolders
+&nbsp; */
+&nbsp;public class ReviewAdapter extends ListAdapter&lt;Review, ReviewAdapter.ViewHolder&gt; {
+&nbsp;
+&nbsp;    // --- Constructor ---
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Constructs a new ReviewAdapter.
+&nbsp;     * Uses ItemCallback for efficient list comparison.
+&nbsp;     */
+&nbsp;    public ReviewAdapter() {
+<b class="nc">&nbsp;        super(new ItemCallback());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    // --- RecyclerView.Adapter methods ---
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Creates a new ViewHolder for a review item.
+&nbsp;     *
+&nbsp;     * @param parent   the parent ViewGroup
+&nbsp;     * @param viewType the view type (unused here)
+&nbsp;     * @return a new ViewHolder instance
+&nbsp;     */
+&nbsp;    @NonNull
+&nbsp;    @Override
+&nbsp;    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+<b class="nc">&nbsp;        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_review, parent, false);</b>
+<b class="nc">&nbsp;        return new ViewHolder(itemView);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Binds review data to the ViewHolder at the specified position.
+&nbsp;     *
+&nbsp;     * @param holder   the ViewHolder to bind data to
+&nbsp;     * @param position the position in the list
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+&nbsp;        // Appelle holder.bind() avec l&#39;élément à la position donnée
+<b class="nc">&nbsp;        holder.bind(getItem(position));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    // --- ViewHolder ---
+&nbsp;
+&nbsp;    /**
+&nbsp;     * ViewHolder class that holds references to the views for each review item.
+&nbsp;     */
+&nbsp;
+&nbsp;    static class ViewHolder extends RecyclerView.ViewHolder {
+&nbsp;        // Déclare les variables pour chaque élément du layout
+&nbsp;        private final TextView tvReviewerName;
+&nbsp;        private final TextView tvReviewerComment;
+&nbsp;        private final RatingBar rbReviewRating;
+&nbsp;        private final ImageView ivReviewerAvatar;
+&nbsp;
+&nbsp;        /**
+&nbsp;         * Constructs a ViewHolder and initializes view references.
+&nbsp;         *
+&nbsp;         * @param itemView the item view
+&nbsp;         */
+&nbsp;        public ViewHolder(@NonNull View itemView) {
+<b class="nc">&nbsp;            super(itemView);</b>
+<b class="nc">&nbsp;            tvReviewerName = itemView.findViewById(R.id.tvReviewerName);</b>
+<b class="nc">&nbsp;            tvReviewerComment = itemView.findViewById(R.id.tvReviewerComment);</b>
+<b class="nc">&nbsp;            rbReviewRating = itemView.findViewById(R.id.rbReviewRating);</b>
+<b class="nc">&nbsp;            ivReviewerAvatar = itemView.findViewById(R.id.ivReviewerAvatar);</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        /**
+&nbsp;         * Binds review data to the views.
+&nbsp;         *
+&nbsp;         * @param review the review to display
+&nbsp;         */
+&nbsp;        public void bind(Review review) {
+&nbsp;            // Remplit les TextView, ImageView, RatingBar avec les données de review
+<b class="nc">&nbsp;            tvReviewerName.setText(review.getUsername());</b>
+<b class="nc">&nbsp;            tvReviewerComment.setText(review.getComment());</b>
+<b class="nc">&nbsp;            rbReviewRating.setRating(review.getRate());</b>
+<b class="nc">&nbsp;            Glide.with(itemView.getContext())</b>
+<b class="nc">&nbsp;                    .load(review.getPicture())</b>
+<b class="nc">&nbsp;                    .circleCrop()</b>
+<b class="nc">&nbsp;                    .into(ivReviewerAvatar);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    // --- DiffUtil callback ---
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Callback for calculating the difference between two lists of reviews.
+&nbsp;     * Used by ListAdapter for efficient list updates.
+&nbsp;     */
+<b class="nc">&nbsp;    private static class ItemCallback extends DiffUtil.ItemCallback&lt;Review&gt; {</b>
+&nbsp;
+&nbsp;        /**
+&nbsp;         * Checks if two review items represent the same object.
+&nbsp;         * Compares by reference (memory address).
+&nbsp;         *
+&nbsp;         * @param oldItem the old review
+&nbsp;         * @param newItem the new review
+&nbsp;         * @return true if they are the same object
+&nbsp;         */
+&nbsp;        @Override
+&nbsp;        public boolean areItemsTheSame(@NonNull Review oldItem, @NonNull Review newItem) {
+<b class="nc">&nbsp;            return oldItem == newItem;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        /**
+&nbsp;         * Checks if two review items have the same content.
+&nbsp;         * Compares all fields of the review objects.
+&nbsp;         *
+&nbsp;         * @param oldItem the old review
+&nbsp;         * @param newItem the new review
+&nbsp;         * @return true if they have the same content
+&nbsp;         */
+&nbsp;        @Override
+&nbsp;        public boolean areContentsTheSame(@NonNull Review oldItem, @NonNull Review newItem) {
+<b class="nc">&nbsp;            return oldItem.equals(newItem);</b>
+&nbsp;        }
+&nbsp;
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-10-26 15:18</div>
+</div>
+</body>
+</html>

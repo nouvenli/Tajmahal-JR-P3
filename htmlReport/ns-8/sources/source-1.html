@@ -1,0 +1,344 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > DetailsFragment</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.openclassrooms.tajmahal.ui.restaurant</a>
+</div>
+
+<h1>Coverage Summary for Class: DetailsFragment (com.openclassrooms.tajmahal.ui.restaurant)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">DetailsFragment</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/15)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/14)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/53)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.openclassrooms.tajmahal.ui.restaurant;
+&nbsp;
+&nbsp;import android.content.Intent;
+&nbsp;import android.net.Uri;
+&nbsp;import android.os.Bundle;
+&nbsp;
+&nbsp;import androidx.annotation.NonNull;
+&nbsp;import androidx.annotation.Nullable;
+&nbsp;import androidx.fragment.app.Fragment;
+&nbsp;import androidx.lifecycle.ViewModelProvider;
+&nbsp;
+&nbsp;import android.view.LayoutInflater;
+&nbsp;import android.view.View;
+&nbsp;import android.view.ViewGroup;
+&nbsp;import android.widget.Toast;
+&nbsp;
+&nbsp;import com.openclassrooms.tajmahal.R;
+&nbsp;import com.openclassrooms.tajmahal.databinding.FragmentDetailsBinding;
+&nbsp;import com.openclassrooms.tajmahal.domain.model.Restaurant;
+&nbsp;import com.openclassrooms.tajmahal.domain.model.ReviewStats;
+&nbsp;import com.openclassrooms.tajmahal.ui.reviews.ReviewFragment;
+&nbsp;
+&nbsp;import dagger.hilt.android.AndroidEntryPoint;
+&nbsp;
+&nbsp;/**
+&nbsp; * DetailsFragment is the entry point of the application and serves as the primary UI.
+&nbsp; * It displays details about a restaurant and provides functionality to open its location
+&nbsp; * in a map, call its phone number, or view its website, , and navigate to the reviews screen.
+&nbsp; * &lt;p&gt;
+&nbsp; * This class uses {@link FragmentDetailsBinding} for data binding to its layout and
+&nbsp; * {@link DetailsViewModel} to interact with data sources and manage UI-related data.
+&nbsp; */
+&nbsp;
+&nbsp;@AndroidEntryPoint
+<b class="nc">&nbsp;public class DetailsFragment extends Fragment {</b>
+&nbsp;
+&nbsp;    private FragmentDetailsBinding binding;
+&nbsp;    private DetailsViewModel detailsViewModel;
+&nbsp;
+&nbsp;    //--- Lifecycle methods ---
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Creates and returns the view hierarchy associated with the fragment.
+&nbsp;     *
+&nbsp;     * @param inflater           The LayoutInflater object that can be used to inflate any views in the fragment.
+&nbsp;     * @param container          If non-null, this is the parent view that the fragment&#39;s UI should be attached to.
+&nbsp;     *                           The fragment should not add the view itself but return it.
+&nbsp;     * @param savedInstanceState If non-null, this fragment is being re-constructed
+&nbsp;     *                           from a previous saved state as given here.
+&nbsp;     * @return Returns the View for the fragment&#39;s UI, or null.
+&nbsp;     */
+&nbsp;    @Nullable
+&nbsp;    @Override
+&nbsp;    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+&nbsp;                             @Nullable Bundle savedInstanceState) {
+<b class="nc">&nbsp;        binding = FragmentDetailsBinding.inflate(inflater, container, false);</b>
+<b class="nc">&nbsp;        return binding.getRoot(); // Returns the root view.</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * This method is called immediately after `onCreateView()`.
+&nbsp;     * Use this method to perform final initialization once the fragment views have been inflated.
+&nbsp;     *
+&nbsp;     * @param view               The View returned by `onCreateView()`.
+&nbsp;     * @param savedInstanceState If non-null, this fragment is being re-constructed
+&nbsp;     *                           from a previous saved state as given here.
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+<b class="nc">&nbsp;        super.onViewCreated(view, savedInstanceState);</b>
+<b class="nc">&nbsp;        setupViewModel();</b>
+<b class="nc">&nbsp;        observeRestaurant();</b>
+<b class="nc">&nbsp;        observeReviewStats();</b>
+<b class="nc">&nbsp;        setupNavigation();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void onDestroyView() {
+<b class="nc">&nbsp;        super.onDestroyView();</b>
+&nbsp;        // Avoid memory leaks related to binding
+<b class="nc">&nbsp;        binding = null;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    // --- Setup methods ---
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Initializes the ViewModel for this fragment.
+&nbsp;     */
+&nbsp;    private void setupViewModel() {
+<b class="nc">&nbsp;        detailsViewModel = new ViewModelProvider(this).get(DetailsViewModel.class);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    // --- ViewModel observation ---
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Observes restaurant data from the ViewModel and updates the UI.
+&nbsp;     */
+&nbsp;    private void observeRestaurant() {
+<b class="nc">&nbsp;        detailsViewModel.getTajMahalRestaurant().observe(getViewLifecycleOwner(), this::updateRestaurantUI);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Observes review statistics from the ViewModel and updates the UI.
+&nbsp;     */
+&nbsp;    private void observeReviewStats() {
+<b class="nc">&nbsp;        detailsViewModel.getReviewStats().observe(getViewLifecycleOwner(), this::updateReviewStatsUI);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    // --- UI update Methods ---
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Updates the UI with restaurant information.
+&nbsp;     *
+&nbsp;     * @param restaurant the restaurant data to display
+&nbsp;     */
+&nbsp;    private void updateRestaurantUI(Restaurant restaurant) {
+<b class="nc">&nbsp;        if (restaurant == null) return;</b>
+&nbsp;
+&nbsp;        // Display restaurant information
+<b class="nc">&nbsp;        binding.tvRestaurantName.setText(restaurant.getName());</b>
+<b class="nc">&nbsp;        binding.tvRestaurantDay.setText(detailsViewModel.getCurrentDay(requireContext()));</b>
+<b class="nc">&nbsp;        binding.tvRestaurantType.setText(String.format(&quot;%s %s&quot;, getString(R.string.restaurant), restaurant.getType()));</b>
+<b class="nc">&nbsp;        binding.tvRestaurantHours.setText(restaurant.getHours());</b>
+<b class="nc">&nbsp;        binding.tvRestaurantAddress.setText(restaurant.getAddress());</b>
+<b class="nc">&nbsp;        binding.tvRestaurantWebsite.setText(restaurant.getWebsite());</b>
+<b class="nc">&nbsp;        binding.tvRestaurantPhoneNumber.setText(restaurant.getPhoneNumber());</b>
+&nbsp;
+&nbsp;        // Show/hide service type chips
+<b class="nc">&nbsp;        binding.chipOnPremise.setVisibility(restaurant.isDineIn() ? View.VISIBLE : View.GONE);</b>
+<b class="nc">&nbsp;        binding.chipTakeAway.setVisibility(restaurant.isTakeAway() ? View.VISIBLE : View.GONE);</b>
+&nbsp;
+&nbsp;        // Setup action buttons
+<b class="nc">&nbsp;        binding.buttonAdress.setOnClickListener(v -&gt; openMap(restaurant.getAddress()));</b>
+<b class="nc">&nbsp;        binding.buttonPhone.setOnClickListener(v -&gt; dialPhoneNumber(restaurant.getPhoneNumber()));</b>
+<b class="nc">&nbsp;        binding.buttonWebsite.setOnClickListener(v -&gt; openBrowser(restaurant.getWebsite()));</b>
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Updates the UI with review statistics.
+&nbsp;     *
+&nbsp;     * @param stats the review statistics to display
+&nbsp;     */
+&nbsp;    private void updateReviewStatsUI(ReviewStats stats) {
+<b class="nc">&nbsp;        if (stats == null) return;</b>
+&nbsp;
+&nbsp;        // Display average rating and count
+<b class="nc">&nbsp;        binding.ratingBar.setRating(stats.getAverageRating());</b>
+<b class="nc">&nbsp;        binding.tvAverageRating.setText(String.format(&quot;%.1f&quot;, stats.getAverageRating()));</b>
+<b class="nc">&nbsp;        binding.tvReviewCount.setText(String.format(&quot;(%d)&quot;, stats.getReviewCount()));</b>
+&nbsp;
+&nbsp;        // update distribution
+<b class="nc">&nbsp;        binding.progressBar5.setProgress(stats.getPercentDistribution()[4]);</b>
+<b class="nc">&nbsp;        binding.progressBar4.setProgress(stats.getPercentDistribution()[3]);</b>
+<b class="nc">&nbsp;        binding.progressBar3.setProgress(stats.getPercentDistribution()[2]);</b>
+<b class="nc">&nbsp;        binding.progressBar2.setProgress(stats.getPercentDistribution()[1]);</b>
+<b class="nc">&nbsp;        binding.progressBar1.setProgress(stats.getPercentDistribution()[0]);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    // --- Intent methods ---
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Opens the provided address in Google Maps or shows an error if Google Maps
+&nbsp;     * is not installed.
+&nbsp;     *
+&nbsp;     * @param address The address to be shown in Google Maps.
+&nbsp;     */
+&nbsp;    private void openMap(String address) {
+<b class="nc">&nbsp;        Uri gmmIntentUri = Uri.parse(&quot;geo:0,0?q=&quot; + Uri.encode(address));</b>
+<b class="nc">&nbsp;        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);</b>
+<b class="nc">&nbsp;        mapIntent.setPackage(&quot;com.google.android.apps.maps&quot;);</b>
+<b class="nc">&nbsp;        if (mapIntent.resolveActivity(requireActivity().getPackageManager()) != null) {</b>
+<b class="nc">&nbsp;            startActivity(mapIntent);</b>
+&nbsp;        } else {
+<b class="nc">&nbsp;            Toast.makeText(requireActivity(), R.string.maps_not_installed, Toast.LENGTH_SHORT).show();</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Dials the provided phone number or shows an error if there&#39;s no dialing application
+&nbsp;     * installed.
+&nbsp;     *
+&nbsp;     * @param phoneNumber The phone number to be dialed.
+&nbsp;     */
+&nbsp;    private void dialPhoneNumber(String phoneNumber) {
+<b class="nc">&nbsp;        Intent intent = new Intent(Intent.ACTION_DIAL);</b>
+<b class="nc">&nbsp;        intent.setData(Uri.parse(&quot;tel:&quot; + phoneNumber));</b>
+<b class="nc">&nbsp;        if (intent.resolveActivity(requireActivity().getPackageManager()) != null) {</b>
+<b class="nc">&nbsp;            startActivity(intent);</b>
+&nbsp;        } else {
+<b class="nc">&nbsp;            Toast.makeText(requireActivity(), R.string.phone_not_found, Toast.LENGTH_SHORT).show();</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Opens the provided website URL in a browser or shows an error if there&#39;s no
+&nbsp;     * browser installed.
+&nbsp;     *
+&nbsp;     * @param websiteUrl The URL of the website to be opened.
+&nbsp;     */
+&nbsp;    private void openBrowser(String websiteUrl) {
+<b class="nc">&nbsp;        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(websiteUrl));</b>
+<b class="nc">&nbsp;        if (intent.resolveActivity(requireActivity().getPackageManager()) != null) {</b>
+<b class="nc">&nbsp;            startActivity(intent);</b>
+&nbsp;        } else {
+<b class="nc">&nbsp;            Toast.makeText(requireActivity(), R.string.no_browser_found, Toast.LENGTH_SHORT).show();</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    // --- Navigation ---
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Sets up navigation to the review screen.
+&nbsp;     */
+&nbsp;    private void setupNavigation() {
+<b class="nc">&nbsp;        binding.tvSeeReviews.setOnClickListener(v -&gt; {</b>
+<b class="nc">&nbsp;            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, ReviewFragment.newInstance()).addToBackStack(null).commit();</b>
+&nbsp;        });
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    public static DetailsFragment newInstance() {
+<b class="nc">&nbsp;        return new DetailsFragment();</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-10-26 15:18</div>
+</div>
+</body>
+</html>

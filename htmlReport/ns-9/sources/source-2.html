@@ -1,0 +1,316 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > ReviewFragment</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.openclassrooms.tajmahal.ui.reviews</a>
+</div>
+
+<h1>Coverage Summary for Class: ReviewFragment (com.openclassrooms.tajmahal.ui.reviews)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ReviewFragment</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/20)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/49)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.openclassrooms.tajmahal.ui.reviews;
+&nbsp;
+&nbsp;import android.graphics.Color;
+&nbsp;import android.os.Bundle;
+&nbsp;
+&nbsp;import androidx.annotation.NonNull;
+&nbsp;import androidx.annotation.Nullable;
+&nbsp;import androidx.fragment.app.Fragment;
+&nbsp;import androidx.lifecycle.ViewModelProvider;
+&nbsp;import androidx.recyclerview.widget.LinearLayoutManager;
+&nbsp;
+&nbsp;import android.view.LayoutInflater;
+&nbsp;import android.view.View;
+&nbsp;import android.view.ViewGroup;
+&nbsp;import android.view.Window;
+&nbsp;import android.widget.Toast;
+&nbsp;
+&nbsp;import com.bumptech.glide.Glide;
+&nbsp;import com.openclassrooms.tajmahal.adapter.ReviewAdapter;
+&nbsp;import com.openclassrooms.tajmahal.databinding.FragmentReviewBinding;
+&nbsp;
+&nbsp;import java.util.ArrayList;
+&nbsp;
+&nbsp;import dagger.hilt.android.AndroidEntryPoint;
+&nbsp;
+&nbsp;
+&nbsp;/**
+&nbsp; * Fragment that displays a list of reviews for a restaurant and allows users to add new reviews.
+&nbsp; * uses ReviewViewModel to manage data and ReviewAdapter to display the list of reviews.
+&nbsp; */
+&nbsp;
+&nbsp;@AndroidEntryPoint
+<b class="nc">&nbsp;public class ReviewFragment extends Fragment {</b>
+&nbsp;
+&nbsp;    private FragmentReviewBinding binding;
+&nbsp;    private ReviewViewModel reviewViewModel;
+&nbsp;    private ReviewAdapter adapter;
+&nbsp;
+&nbsp;// ---lifecycle methods ---
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void onCreate(Bundle savedInstanceState) {
+<b class="nc">&nbsp;        super.onCreate(savedInstanceState);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+&nbsp;        // Inflate the layout for this fragment
+<b class="nc">&nbsp;        binding = FragmentReviewBinding.inflate(inflater, container, false);</b>
+<b class="nc">&nbsp;        return binding.getRoot();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+<b class="nc">&nbsp;        super.onViewCreated(view, savedInstanceState);</b>
+<b class="nc">&nbsp;        setupViewModel();</b>
+<b class="nc">&nbsp;        setupRecyclerView();</b>
+<b class="nc">&nbsp;        setupUI();</b>
+<b class="nc">&nbsp;        setupRestaurantInfo();</b>
+<b class="nc">&nbsp;        observeViewModelData();</b>
+<b class="nc">&nbsp;        setupAddReviewButton();</b>
+<b class="nc">&nbsp;        setupBackButton();</b>
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;    // ---setup methods ---
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Initializes the ViewModel.
+&nbsp;     */
+&nbsp;    private void setupViewModel() {
+<b class="nc">&nbsp;        reviewViewModel = new ViewModelProvider(this).get(ReviewViewModel.class);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Sets up the RecyclerView with its adapter.
+&nbsp;     * Configures vertical layout for displaying the review list.
+&nbsp;     */
+&nbsp;    private void setupRecyclerView() {
+<b class="nc">&nbsp;        adapter = new ReviewAdapter();</b>
+<b class="nc">&nbsp;        binding.rvReviews.setAdapter(adapter);</b>
+<b class="nc">&nbsp;        binding.rvReviews.setLayoutManager(new LinearLayoutManager(requireContext()));</b>
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Configures the status bar appearance.
+&nbsp;     * Sets white background with dark icons for better visibility.
+&nbsp;     */
+&nbsp;    private void setupUI() {
+<b class="nc">&nbsp;        Window window = requireActivity().getWindow();</b>
+&nbsp;
+&nbsp;        // Reset status bar to normal state
+<b class="nc">&nbsp;        window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);</b>
+&nbsp;
+&nbsp;        // White background for status bar
+<b class="nc">&nbsp;        window.setStatusBarColor(Color.WHITE);</b>
+&nbsp;
+&nbsp;        // Dark icons on status bar (API 23+)
+<b class="nc">&nbsp;        if (android.os.Build.VERSION.SDK_INT &gt;= android.os.Build.VERSION_CODES.M) {</b>
+<b class="nc">&nbsp;            window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Sets up the current user&#39;s information display.
+&nbsp;     * Loads username and profile picture.
+&nbsp;     */
+&nbsp;    private void setupRestaurantInfo() {
+<b class="nc">&nbsp;        binding.tvUserName.setText(reviewViewModel.getCurrentUserName());</b>
+<b class="nc">&nbsp;        Glide.with(requireContext())</b>
+<b class="nc">&nbsp;                .load(reviewViewModel.getCurrentUserPicture())</b>
+<b class="nc">&nbsp;                .circleCrop()</b>
+<b class="nc">&nbsp;                .into(binding.ivAvatarUser);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    // --- ViewModel Observation  ---
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Observes ViewModel LiveData and updates UI accordingly.
+&nbsp;     * Handles restaurant info, review list, validation errors, and success events.
+&nbsp;     */
+&nbsp;    private void observeViewModelData() {
+&nbsp;        // Observe restaurant information
+<b class="nc">&nbsp;        reviewViewModel.getRestaurant().observe(getViewLifecycleOwner(), restaurant -&gt; {</b>
+<b class="nc">&nbsp;            binding.tvRestaurantName.setText(restaurant.getName());</b>
+&nbsp;        });
+&nbsp;
+&nbsp;        // Observe review list updates
+<b class="nc">&nbsp;        reviewViewModel.getReviews().observe(getViewLifecycleOwner(), reviews -&gt; {</b>
+<b class="nc">&nbsp;            adapter.submitList(new ArrayList&lt;&gt;(reviews), () -&gt; {</b>
+<b class="nc">&nbsp;                binding.rvReviews.smoothScrollToPosition(0);</b>
+&nbsp;            });
+&nbsp;        });
+&nbsp;
+&nbsp;        // Observe comment validation errors
+<b class="nc">&nbsp;        reviewViewModel.getCommentError().observe(getViewLifecycleOwner(), error -&gt; {</b>
+<b class="nc">&nbsp;            binding.etUserComment.setError(error);</b>
+&nbsp;        });
+&nbsp;
+&nbsp;        // Observe rating validation errors
+<b class="nc">&nbsp;        reviewViewModel.getRatingError().observe(getViewLifecycleOwner(), error -&gt; {</b>
+&nbsp;            // Utilise un Toast pour une erreur de rating
+<b class="nc">&nbsp;            if (error != null) {</b>
+<b class="nc">&nbsp;                Toast.makeText(requireContext(), error, Toast.LENGTH_SHORT).show();</b>
+&nbsp;            }
+&nbsp;        });
+&nbsp;
+&nbsp;        // Observe review addition success event
+<b class="nc">&nbsp;        reviewViewModel.getReviewAddSuccessEvent().observe(getViewLifecycleOwner(), isSuccess -&gt; {</b>
+<b class="nc">&nbsp;            if (isSuccess) {</b>
+&nbsp;                // Réinitialisation de l&#39;UI si l&#39;ajout a réussi - C&#39;EST UNE MANIPULATION D&#39;UI
+<b class="nc">&nbsp;                binding.etUserComment.setText(&quot;&quot;);</b>
+<b class="nc">&nbsp;                binding.rbRatingBarUser.setRating(0);</b>
+<b class="nc">&nbsp;                Toast.makeText(requireContext(), &quot;Avis ajouté avec succès&quot;, Toast.LENGTH_SHORT).show();</b>
+&nbsp;
+&nbsp;                // Reset success event to prevent re-triggering on rotation
+<b class="nc">&nbsp;                reviewViewModel.resetSuccessEvent();</b>
+&nbsp;            }
+&nbsp;        });
+&nbsp;    }
+&nbsp;
+&nbsp;    // --- user interaction ---
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Sets up the review submission button.
+&nbsp;     * Extracts user input and triggers review validation and addition.
+&nbsp;     */
+&nbsp;    private void setupAddReviewButton() {
+<b class="nc">&nbsp;        binding.btValidation.setOnClickListener(v -&gt; {</b>
+&nbsp;            // Get user input
+<b class="nc">&nbsp;            String comment = binding.etUserComment.getText().toString().trim();</b>
+<b class="nc">&nbsp;            float rating = binding.rbRatingBarUser.getRating();</b>
+&nbsp;
+&nbsp;            // Process review through ViewModel
+<b class="nc">&nbsp;            reviewViewModel.processNewReview(comment, (int) rating);</b>
+&nbsp;        });
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Sets up the back button to return to the previous screen.
+&nbsp;     */
+&nbsp;    private void setupBackButton() {
+<b class="nc">&nbsp;        binding.ivGoBack.setOnClickListener(v -&gt; {</b>
+<b class="nc">&nbsp;            requireActivity().getSupportFragmentManager().popBackStack();</b>
+&nbsp;        });
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    // --- Factory method ---
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Creates a new instance of ReviewFragment.
+&nbsp;     *
+&nbsp;     * @return a new ReviewFragment instance
+&nbsp;     */
+&nbsp;    public static ReviewFragment newInstance() {
+<b class="nc">&nbsp;        return new ReviewFragment();</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-10-26 15:18</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,280 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > DetailsViewModel</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.openclassrooms.tajmahal.ui.restaurant</a>
+</div>
+
+<h1>Coverage Summary for Class: DetailsViewModel (com.openclassrooms.tajmahal.ui.restaurant)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">DetailsViewModel</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/19)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/34)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.openclassrooms.tajmahal.ui.restaurant;
+&nbsp;
+&nbsp;import android.content.Context;
+&nbsp;
+&nbsp;import androidx.lifecycle.LiveData;
+&nbsp;import androidx.lifecycle.MediatorLiveData;
+&nbsp;import androidx.lifecycle.ViewModel;
+&nbsp;
+&nbsp;import com.openclassrooms.tajmahal.R;
+&nbsp;import com.openclassrooms.tajmahal.data.repository.RestaurantRepository;
+&nbsp;import com.openclassrooms.tajmahal.domain.model.Restaurant;
+&nbsp;import com.openclassrooms.tajmahal.domain.model.Review;
+&nbsp;
+&nbsp;import com.openclassrooms.tajmahal.domain.model.ReviewStats;
+&nbsp;
+&nbsp;import javax.inject.Inject;
+&nbsp;
+&nbsp;import java.util.Calendar;
+&nbsp;import java.util.List;
+&nbsp;
+&nbsp;import dagger.hilt.android.lifecycle.HiltViewModel;
+&nbsp;
+&nbsp;/**
+&nbsp; * MainViewModel is responsible for preparing and managing the data for the {@link DetailsFragment}.
+&nbsp; * It communicates with the {@link RestaurantRepository} to fetch restaurant details and
+&nbsp; * calculate aggregated statistics about reviews.
+&nbsp; * &lt;p&gt;
+&nbsp; * This ViewModel is integrated with Hilt for dependency injection.
+&nbsp; */
+&nbsp;@HiltViewModel
+&nbsp;public class DetailsViewModel extends ViewModel {
+&nbsp;
+&nbsp;    private final RestaurantRepository restaurantRepository;
+&nbsp;
+&nbsp;    // --- Computed LiveData ---
+&nbsp;
+&nbsp;    /**
+&nbsp;     * MediatorLiveData that automatically calculates review statistics
+&nbsp;     * whenever the review list changes.
+&nbsp;     */
+<b class="nc">&nbsp;    private final MediatorLiveData&lt;ReviewStats&gt; reviewStats = new MediatorLiveData&lt;&gt;();</b>
+&nbsp;
+&nbsp;    // --- Constructor ---
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Constructs a DetailsViewModel with the required repository.
+&nbsp;     * Initializes the computed LiveData for review statistics.
+&nbsp;     *
+&nbsp;     * @param restaurantRepository the repository for accessing restaurant and review data
+&nbsp;     */
+&nbsp;    @Inject
+<b class="nc">&nbsp;    public DetailsViewModel(RestaurantRepository restaurantRepository) {</b>
+<b class="nc">&nbsp;        this.restaurantRepository = restaurantRepository;</b>
+&nbsp;
+&nbsp;
+&nbsp;        // Setup computed LiveData for review statistics
+<b class="nc">&nbsp;        reviewStats.addSource(getReviews(), reviews -&gt; {</b>
+&nbsp;            // Handle empty or null reviews
+<b class="nc">&nbsp;            if (reviews == null || reviews.isEmpty()) {</b>
+<b class="nc">&nbsp;                reviewStats.setValue(new ReviewStats(0f, 0, new int[5], new int[5]));</b>
+&nbsp;                return;
+&nbsp;            }
+&nbsp;
+&nbsp;            // Calculate rating distribution
+<b class="nc">&nbsp;            float sum = 0f;</b>
+<b class="nc">&nbsp;            int[] distribution = new int[5];</b>
+<b class="nc">&nbsp;            for (Review r : reviews) {</b>
+<b class="nc">&nbsp;                int rate = r.getRate();</b>
+<b class="nc">&nbsp;                if (rate &gt;= 1 &amp;&amp; rate &lt;= 5) {</b>
+<b class="nc">&nbsp;                    distribution[rate - 1]++;</b>
+<b class="nc">&nbsp;                    sum += rate;</b>
+&nbsp;                }
+&nbsp;            }
+&nbsp;
+&nbsp;            // Calculate average rating
+<b class="nc">&nbsp;            int count = reviews.size();</b>
+<b class="nc">&nbsp;            float average = sum / count;</b>
+&nbsp;
+&nbsp;            // Calculate percentage distribution
+<b class="nc">&nbsp;            int[] percent = new int[5];</b>
+<b class="nc">&nbsp;            for (int i = 0; i &lt; 5; i++) {</b>
+<b class="nc">&nbsp;                percent[i] = (int) ((distribution[i] * 100f) / count);</b>
+&nbsp;            }
+&nbsp;            // Update LiveData with calculated statistics
+<b class="nc">&nbsp;            reviewStats.setValue(new ReviewStats(average, count, distribution, percent));</b>
+&nbsp;        });
+&nbsp;    }
+&nbsp;
+&nbsp;    // --- Data access methods ---
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Fetches the details of the Taj Mahal restaurant.
+&nbsp;     *
+&nbsp;     * @return LiveData object containing the details of the Taj Mahal restaurant.
+&nbsp;     */
+&nbsp;    public LiveData&lt;Restaurant&gt; getTajMahalRestaurant() {
+<b class="nc">&nbsp;        return restaurantRepository.getRestaurant();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Retrieves the list of customer reviews.
+&nbsp;     *
+&nbsp;     * @return LiveData containing the list of reviews
+&nbsp;     */
+&nbsp;    public LiveData&lt;List&lt;Review&gt;&gt; getReviews() {
+<b class="nc">&nbsp;        return restaurantRepository.getReviews();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Retrieves the calculated review statistics.
+&nbsp;     * &lt;p&gt;
+&nbsp;     * This LiveData is automatically updated whenever the review list changes.
+&nbsp;     * It provides aggregated data including average rating, review count,
+&nbsp;     * and rating distribution.
+&nbsp;     * &lt;/p&gt;
+&nbsp;     *
+&nbsp;     * @return LiveData containing the computed review statistics
+&nbsp;     */
+&nbsp;    public LiveData&lt;ReviewStats&gt; getReviewStats() {
+<b class="nc">&nbsp;        return reviewStats;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    // --- Utility methods ---
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Retrieves the current day of the week in French.
+&nbsp;     *
+&nbsp;     * @return A string representing the current day of the week in French.
+&nbsp;     */
+&nbsp;    public String getCurrentDay(Context context) {
+<b class="nc">&nbsp;        Calendar calendar = Calendar.getInstance();</b>
+<b class="nc">&nbsp;        int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);</b>
+&nbsp;        String dayString;
+&nbsp;
+<b class="nc">&nbsp;        switch (dayOfWeek) {</b>
+&nbsp;            case Calendar.MONDAY:
+<b class="nc">&nbsp;                dayString = context.getString(R.string.monday);</b>
+&nbsp;                break;
+&nbsp;            case Calendar.TUESDAY:
+<b class="nc">&nbsp;                dayString = context.getString(R.string.tuesday);</b>
+&nbsp;                break;
+&nbsp;            case Calendar.WEDNESDAY:
+<b class="nc">&nbsp;                dayString = context.getString(R.string.wednesday);</b>
+&nbsp;                break;
+&nbsp;            case Calendar.THURSDAY:
+<b class="nc">&nbsp;                dayString = context.getString(R.string.thursday);</b>
+&nbsp;                break;
+&nbsp;            case Calendar.FRIDAY:
+<b class="nc">&nbsp;                dayString = context.getString(R.string.friday);</b>
+&nbsp;                break;
+&nbsp;            case Calendar.SATURDAY:
+<b class="nc">&nbsp;                dayString = context.getString(R.string.saturday);</b>
+&nbsp;                break;
+&nbsp;            case Calendar.SUNDAY:
+<b class="nc">&nbsp;                dayString = context.getString(R.string.sunday);</b>
+&nbsp;                break;
+&nbsp;            default:
+<b class="nc">&nbsp;                dayString = &quot;&quot;;</b>
+&nbsp;        }
+<b class="nc">&nbsp;        return dayString;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;}
+&nbsp;
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-10-26 15:18</div>
+</div>
+</body>
+</html>
