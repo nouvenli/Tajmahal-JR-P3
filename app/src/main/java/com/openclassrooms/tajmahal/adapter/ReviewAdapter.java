@@ -56,7 +56,6 @@ public class ReviewAdapter extends ListAdapter<Review, ReviewAdapter.ViewHolder>
      */
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        // Appelle holder.bind() avec l'élément à la position donnée
         holder.bind(getItem(position));
     }
 

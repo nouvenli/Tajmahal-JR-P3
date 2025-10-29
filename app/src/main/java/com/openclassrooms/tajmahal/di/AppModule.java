@@ -13,7 +13,7 @@ import dagger.hilt.components.SingletonComponent;
 /**
  * AppModule is responsible for providing application-level dependencies
  * for the entire app.
- * This module is installed in the SingletonComponent
+ * InThis module is installed in the SingletonComponent
  * ensuring that the provided instances are retained throughout the app's lifecycle.
  */
 @Module
